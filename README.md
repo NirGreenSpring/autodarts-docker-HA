@@ -1,3 +1,10 @@
+## Disclaimer
+Since the autodarts github repository was removed, this repository periodically fetches the latest version from the autodarts api to build and push the image to michvllni/autodarts.
+
+For this reason, the releases in this repository ended when the repository got removed.
+
+Check the [docker hub page](https://hub.docker.com/r/michvllni/autodarts) to find the most recent tags.
+
 ## Installation
 It is possible to run autodarts in a docker container.
 
