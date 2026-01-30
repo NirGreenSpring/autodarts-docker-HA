@@ -15,7 +15,7 @@ startup: services
 boot: auto
 init: false
 
-image: "michvllni/autodarts"
+image: "michvllni/autodarts:latest"
 
 ports:
   3180/tcp: 3180
@@ -23,7 +23,6 @@ ports:
 map:
   - addon_config:rw
 
-# Gives the container broad access to host devices (/dev), so you don't need a fixed list here
 full_access: true
 
 options:
