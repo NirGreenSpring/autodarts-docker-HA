@@ -34,10 +34,15 @@ RUN apk update && \
 ### Run
 FROM alpine:latest
 
+# Add entrypoint that maps /data -> /root/.config/autodarts
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 WORKDIR /usr/local/bin/autodarts
 COPY --from=build /autodarts .
 RUN chmod +x ./autodarts
 
 EXPOSE 3180
 
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["./autodarts"]

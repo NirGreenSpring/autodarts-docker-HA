@@ -1,7 +1,7 @@
 name: "Autodarts"
 slug: "autodarts"
 description: "Autodarts add-on wrapper"
-version: "0.1.3"
+version: "0.1.4"
 url: "https://github.com/NirGreenSpring/autodarts-docker-HA/Autodarts"
 
 
@@ -18,15 +18,19 @@ init: false
 
 ports:
   3180/tcp: 3180
+  
+devices:
+  - /dev/video0
+  - /dev/video2
+  - /dev/video4
+
+map:
+  - addon_config:rw
 
 map:
   - addon_config:rw
 
 full_access: true
 
-options:
-  devices:
-    - /dev/video0
-schema:
-  devices:
-    - str
+options: {}
+schema: {}
