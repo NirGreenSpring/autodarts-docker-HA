@@ -1,31 +1,43 @@
-ARG VERSION
+# Home Assistant add-on builds provide BUILD_VERSION; map it to VERSION
+ARG BUILD_VERSION
+ARG VERSION=${BUILD_VERSION}
 
-###Build
+### Build
 FROM --platform=${BUILDPLATFORM} alpine:latest AS build
+
 ARG VERSION \
     BUILDPLATFORM \
     TARGETPLATFORM
 
 WORKDIR /
+
 RUN apk update && \
-    apk add wget tar jq && \
+    apk add --no-cache wget tar jq && \
     PLATFORM=$(echo ${TARGETPLATFORM} | cut -d'/' -f1) && \
     ARCH=$(echo ${TARGETPLATFORM} | cut -d'/' -f2) && \
     echo "PLATFORM: $PLATFORM; ARCH: $ARCH; VERSION: $VERSION" && \
-    ASSETURL=$(wget -qO- "https://get.autodarts.io/detection/latest/${PLATFORM}/${ARCH}/RELEASES.json" | jq -r --arg VERSION "${VERSION}" '.releases[] | select(.version == $VERSION) | .url') && \
+    RELEASES_JSON=$(wget -qO- "https://get.autodarts.io/detection/latest/${PLATFORM}/${ARCH}/RELEASES.json") && \
+    ASSETURL=$(echo "$RELEASES_JSON" | jq -r --arg VERSION "${VERSION}" '.releases[] | select(.version == $VERSION) | .url' | head -n 1) && \
+    if [ -z "$ASSETURL" ] || [ "$ASSETURL" = "null" ]; then \
+      echo "No exact match for VERSION=$VERSION, falling back to latest release..."; \
+      ASSETURL=$(echo "$RELEASES_JSON" | jq -r '.releases[0].url'); \
+    fi && \
     echo "ASSETURL: $ASSETURL" && \
+    if [ -z "$ASSETURL" ] || [ "$ASSETURL" = "null" ]; then \
+      echo "ERROR: Could not determine an asset URL from RELEASES.json" >&2; \
+      exit 1; \
+    fi && \
     wget "$ASSETURL" && \
-    tar -vxf $(basename $ASSETURL) && \
-    rm $(basename $ASSETURL)
+    tar -vxf "$(basename "$ASSETURL")" && \
+    rm "$(basename "$ASSETURL")"
 
-###Run
+### Run
 FROM alpine:latest
 
 WORKDIR /usr/local/bin/autodarts
 COPY --from=build /autodarts .
 RUN chmod +x ./autodarts
 
-#expose the autodarts port
 EXPOSE 3180
 
 CMD ["./autodarts"]
