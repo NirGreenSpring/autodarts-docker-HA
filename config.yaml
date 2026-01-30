@@ -1,7 +1,7 @@
 name: "Autodarts"
 slug: "autodarts"
 description: "Autodarts add-on wrapper"
-version: "3.3"
+version: "0.1.0"
 url: "https://github.com/vllni/autodarts-docker"
 
 arch:
