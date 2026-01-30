@@ -2,7 +2,8 @@ name: "Autodarts"
 slug: "autodarts"
 description: "Autodarts add-on wrapper"
 version: "0.1.0"
-url: "https://github.com/vllni/autodarts-docker"
+url: "https://github.com/NirGreenSpring/autodarts-docker-HA/Autodarts"
+
 
 arch:
   - amd64
@@ -14,8 +15,6 @@ arch:
 startup: services
 boot: auto
 init: false
-
-image: "michvllni/autodarts"
 
 ports:
   3180/tcp: 3180
