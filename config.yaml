@@ -15,7 +15,7 @@ startup: services
 boot: auto
 init: false
 
-image: "michvllni/autodarts:latest"
+image: "michvllni/autodarts"
 
 ports:
   3180/tcp: 3180
