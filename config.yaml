@@ -1,0 +1,34 @@
+name: "Autodarts"
+slug: "autodarts"
+description: "Autodarts add-on wrapper"
+version: "0.1.0"
+url: "https://github.com/vllni/autodarts-docker"
+
+arch:
+  - amd64
+  - aarch64
+  - armv7
+  - armhf
+  - i386
+
+startup: services
+boot: auto
+init: false
+
+image: "michvllni/autodarts"
+
+ports:
+  3180/tcp: 3180
+
+map:
+  - addon_config:rw
+
+# Gives the container broad access to host devices (/dev), so you don't need a fixed list here
+full_access: true
+
+options:
+  video_devices:
+    - /dev/video0
+schema:
+  video_devices:
+    - str
